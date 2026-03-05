@@ -1,9 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ArtPracticeSection() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  // Handle modal open/close with body scroll lock
+  const openModal = (imageSrc: string) => {
+    setSelectedImage(imageSrc);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+    document.body.style.overflow = 'unset';
+  };
+
+  // Handle keyboard events
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && selectedImage) {
+        closeModal();
+      }
+    };
+
+    if (selectedImage) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = 'unset';
+      };
+    }
+  }, [selectedImage]);
   // Art pieces - your actual work from the gallery
   const artPieces = [
     {
@@ -214,7 +242,7 @@ export default function ArtPracticeSection() {
           {artPieces.map((piece, index) => (
             <div
               key={piece.id}
-              onClick={() => setSelectedImage(piece.image)}
+              onClick={() => openModal(piece.image)}
               style={{
                 display: 'inline-block',
                 width: '100%',
@@ -297,7 +325,7 @@ export default function ArtPracticeSection() {
             padding: '2rem',
             backdropFilter: 'blur(8px)'
           }}
-          onClick={() => setSelectedImage(null)}
+          onClick={closeModal}
         >
           <div
             style={{
@@ -312,7 +340,7 @@ export default function ArtPracticeSection() {
           >
             {/* Close button */}
             <button
-              onClick={() => setSelectedImage(null)}
+              onClick={closeModal}
               style={{
                 position: 'absolute',
                 top: '-3rem',
