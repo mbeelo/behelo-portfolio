@@ -1,60 +1,117 @@
+'use client';
+
+import { useState } from 'react';
 import Hero from '@/components/Hero';
-import ProjectCard from '@/components/ProjectCard';
-import { projects } from '@/lib/projects';
-import ArtCarousel from '@/components/ArtCarousel';
-import Link from 'next/link';
-import Button from '@/components/Button';
+import ProjectShowcase from '@/components/ProjectShowcase';
+import ArtPracticeSection from '@/components/ArtPracticeSection';
+import InfoPage from '@/components/InfoPage';
+import Navigation from '@/components/Navigation';
+import { AnimatedSection } from '@/lib/useScrollAnimation';
 
 export default function HomePage() {
+  const [currentView, setCurrentView] = useState<'work' | 'info'>('work');
+
+  const handleViewChange = (view: 'work' | 'info') => {
+    setCurrentView(view);
+    // Smooth scroll to top when switching views
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <>
-      <Hero />
+      {/* Navigation with portfolio controls */}
+      <Navigation
+        currentView={currentView}
+        onViewChange={handleViewChange}
+        showPortfolioNav={true}
+      />
 
-      {/* PROJECTS */}
-      <section className="section">
-        <div className="container">
-          <h2>Projects</h2>
-          <p className="small" style={{ marginBottom: 14 }}>
-            Experiments, tools, and things I’m releasing.
-          </p>
-          <div style={{ display: 'grid', gap: 16 }}>
-            {projects.map((p) => (
-              <ProjectCard key={p.href} {...p} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Content based on current view */}
+      {currentView === 'work' && (
+        <>
+          {/* Hero section */}
+          <AnimatedSection>
+            <Hero />
+          </AnimatedSection>
 
-      {/* ART */}
-      <section className="section">
-        <div className="container">
-          <h2>Art</h2>
-          <p className="small" style={{ marginBottom: 14 }}>
-            Sketches, studies, and worlds I’m building.
-          </p>
-          <ArtCarousel />
-          <div style={{ textAlign: 'right', marginTop: 8 }}>
-            <Link href="/gallery" className="small underline">
-              View all →
-            </Link>
-          </div>
-        </div>
-      </section>
+          {/* Project showcase */}
+          <AnimatedSection delay={200}>
+            <ProjectShowcase />
+          </AnimatedSection>
 
-      {/* CONTACT */}
-      <section className="section">
-        <div className="container">
-          <h2>Contact</h2>
-          <p style={{ marginTop: 6 }}>
-            Want to collaborate, commission, or just talk?
-          </p>
-          <div style={{ marginTop: 12 }}>
-            <Button href="mailto:you@behelo.com" variant="outline">
-              Let’s Connect
-            </Button>
+          {/* Art & Practice section */}
+          <AnimatedSection delay={400}>
+            <ArtPracticeSection />
+          </AnimatedSection>
+        </>
+      )}
+
+      {currentView === 'info' && (
+        <>
+          <InfoPage />
+        </>
+      )}
+
+      {/* Footer */}
+      <AnimatedSection>
+        <footer
+          style={{
+            padding: '4rem 0 2rem',
+            textAlign: 'center',
+            borderTop: '1px solid var(--line)',
+            marginTop: 'var(--spacing-section)'
+          }}
+        >
+          <div className="container">
+            {/* Monogram */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                background: 'var(--ink)',
+                color: 'var(--bg)',
+                borderRadius: '8px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--step--1)',
+                fontWeight: '600',
+                margin: '0 auto 1rem'
+              }}
+            >
+              B
+            </div>
+
+            {/* Copyright */}
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--step--2)',
+                color: 'var(--muted)',
+                marginBottom: '0.5rem',
+                textTransform: 'uppercase',
+                letterSpacing: '-0.02em' // Match hero's tight tracking for brand consistency
+              }}
+            >
+              © 2025 Behelo
+            </p>
+
+            {/* Whimsical note */}
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--step--2)',
+                color: 'var(--muted-light)',
+                margin: 0,
+                fontStyle: 'italic'
+              }}
+            >
+              Built with curiosity & craft in Oakland
+            </p>
           </div>
-        </div>
-      </section>
+        </footer>
+      </AnimatedSection>
     </>
   );
 }
