@@ -61,7 +61,7 @@ export default function Hero() {
                 opacity: '0.65' // Tasteful fade to push attention back to tagline
               }}
             >
-              Independent studio — Oakland, CA
+              Independent creator — Oakland, CA
             </div>
 
             <div

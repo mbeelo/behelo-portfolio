@@ -19,6 +19,7 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://behelo.com'),
   title: {
     default: 'Behelo - Voice Actor, Builder & Artist',
     template: '%s | Behelo'
@@ -37,10 +38,10 @@ export const metadata: Metadata = {
     description: 'Voice actor, builder, and artist crafting stories, tools & asymmetric bets. Based in Oakland.',
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://behelo.com'}/og-image.jpg`,
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: 'Behelo - Cultural Heritage Tools & Digital Library'
+        alt: 'Behelo - Voice Actor, Builder & Artist'
       }
     ]
   },
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
     creator: '@michaelebako',
     title: 'Behelo - Voice Actor, Builder & Artist',
     description: 'Voice actor, builder, and artist crafting stories, tools & asymmetric bets.',
-    images: [`${process.env.NEXT_PUBLIC_SITE_URL || 'https://behelo.com'}/og-image.jpg`]
+    images: ['/opengraph-image']
   },
   robots: {
     index: true,
