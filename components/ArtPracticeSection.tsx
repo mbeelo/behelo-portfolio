@@ -323,7 +323,8 @@ export default function ArtPracticeSection() {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '2rem',
-            backdropFilter: 'blur(8px)'
+            backdropFilter: 'blur(8px)',
+            overflow: 'hidden'
           }}
           onClick={closeModal}
         >
