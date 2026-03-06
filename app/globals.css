@@ -708,3 +708,59 @@ input:valid, textarea:valid, select:valid {
     margin-bottom: 16px;
   }
 }
+
+/* Navigation Responsive Styles */
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mobile-hamburger {
+  display: none;
+}
+
+.mobile-menu-overlay {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-hamburger {
+    display: flex !important;
+  }
+
+  .mobile-menu-modal {
+    display: block !important;
+  }
+
+  /* Adjust navigation container padding on mobile */
+  [data-nav-container] {
+    padding: 0 1rem !important;
+  }
+
+  /* Fix hero text overflow on mobile */
+  .hero-content {
+    padding: 0 1rem !important;
+    max-width: 100% !important;
+    overflow-x: hidden;
+  }
+
+  .hero-metadata {
+    max-width: 100% !important;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .hero-location, .hero-languages {
+    max-width: 100% !important;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: var(--step--2) !important;
+    line-height: 1.6 !important;
+  }
+}

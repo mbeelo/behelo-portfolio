@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function ArtPracticeSection() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -13,7 +14,7 @@ export default function ArtPracticeSection() {
 
   const closeModal = () => {
     setSelectedImage(null);
-    document.body.style.overflow = 'unset';
+    document.body.style.overflow = '';
   };
 
   // Handle keyboard events
@@ -28,7 +29,7 @@ export default function ArtPracticeSection() {
       document.addEventListener('keydown', handleKeyDown);
       return () => {
         document.removeEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = 'unset';
+        document.body.style.overflow = '';
       };
     }
   }, [selectedImage]);
@@ -171,6 +172,7 @@ export default function ArtPracticeSection() {
   ];
 
   return (
+    <>
     <section className="section">
       <div className="container-wide">
         {/* Studio Practice Header */}
@@ -308,75 +310,6 @@ export default function ArtPracticeSection() {
         </div>
       </div>
 
-      {/* Image Modal */}
-      {selectedImage && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.9)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '2rem',
-            backdropFilter: 'blur(8px)',
-            overflow: 'hidden'
-          }}
-          onClick={closeModal}
-        >
-          <div
-            style={{
-              position: 'relative',
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              onClick={closeModal}
-              style={{
-                position: 'absolute',
-                top: '-3rem',
-                right: 0,
-                background: 'none',
-                border: 'none',
-                color: 'white',
-                fontSize: '2rem',
-                cursor: 'pointer',
-                zIndex: 10000,
-                fontFamily: 'var(--font-mono)',
-                transition: 'opacity 0.3s ease'
-              }}
-              onMouseOver={(e) => e.currentTarget.style.opacity = '0.7'}
-              onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
-            >
-              ×
-            </button>
-
-            {/* Full-size image */}
-            <img
-              src={selectedImage}
-              alt="Artwork enlarged view"
-              style={{
-                maxWidth: '80vw',
-                maxHeight: '80vh',
-                width: 'auto',
-                height: 'auto',
-                objectFit: 'contain',
-                borderRadius: 'var(--radius)'
-              }}
-            />
-          </div>
-        </div>
-      )}
 
       <style jsx>{`
         @keyframes fadeInUp {
@@ -400,5 +333,76 @@ export default function ArtPracticeSection() {
         }
       `}</style>
     </section>
+
+    {/* Image Modal - rendered via portal to document body */}
+    {selectedImage && typeof window !== 'undefined' && createPortal(
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.9)',
+          zIndex: 9999,
+          backdropFilter: 'blur(8px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        onClick={closeModal}
+      >
+        <div
+          style={{
+            maxWidth: '85vw',
+            maxHeight: '75vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close button */}
+          <button
+            onClick={closeModal}
+            style={{
+              position: 'absolute',
+              top: '-3rem',
+              right: 0,
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '2rem',
+              cursor: 'pointer',
+              zIndex: 10000,
+              fontFamily: 'var(--font-mono)',
+              transition: 'opacity 0.3s ease'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.opacity = '0.7'}
+            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+          >
+            ×
+          </button>
+
+          {/* Full-size image */}
+          <img
+            src={selectedImage}
+            alt="Artwork enlarged view"
+            style={{
+              maxWidth: '85vw',
+              maxHeight: '75vh',
+              width: 'auto',
+              height: 'auto',
+              objectFit: 'contain',
+              borderRadius: 'var(--radius)',
+              display: 'block'
+            }}
+          />
+        </div>
+      </div>,
+      document.body
+    )}
+    </>
   );
 }

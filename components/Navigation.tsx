@@ -12,8 +12,26 @@ interface NavigationProps {
 
 export default function Navigation({ currentView = 'work', onViewChange, showPortfolioNav = false }: NavigationProps) {
   const [showContactMenu, setShowContactMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+
+  // Handle mobile menu toggle
+  const toggleMobileMenu = () => {
+    setShowMobileMenu(!showMobileMenu);
+    // Lock body scroll when mobile menu is open
+    if (!showMobileMenu) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  };
+
+  // Close mobile menu when clicking outside or selecting option
+  const closeMobileMenu = () => {
+    setShowMobileMenu(false);
+    document.body.style.overflow = '';
+  };
 
   return (
     <nav style={{
@@ -27,102 +45,78 @@ export default function Navigation({ currentView = 'work', onViewChange, showPor
       zIndex: 1000,
       padding: '16px 0'
     }}>
-      <div className="container" style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        gap: '2rem'
-      }}>
-        {/* Left: Brand Name */}
-        <div style={{ justifySelf: 'start' }}>
-          <Link
-            href="/"
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--step-0)',
-              fontWeight: '600',
-              color: 'var(--ink)',
-              textDecoration: 'none',
-              letterSpacing: '-0.02em', // Match hero's tight tracking for luxury feel
-              textTransform: 'uppercase'
-            }}
-          >
-            Behelo
-          </Link>
-        </div>
-
-        {/* Center: Portfolio Navigation (only on homepage) */}
-        {showPortfolioNav && isHomePage && (
-          <div style={{
-            display: 'flex',
-            gap: '2rem',
-            justifySelf: 'center'
-          }}>
-            <button
-              onClick={() => onViewChange?.('work')}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--step--1)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: currentView === 'work' ? 'var(--ink)' : 'var(--muted)',
-                background: 'none',
-                border: 'none',
-                padding: '0',
-                cursor: 'pointer',
-                borderBottom: currentView === 'work' ? '1px solid var(--ink)' : '1px solid transparent',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              Work
-            </button>
-            <button
-              onClick={() => onViewChange?.('info')}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--step--1)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: currentView === 'info' ? 'var(--ink)' : 'var(--muted)',
-                background: 'none',
-                border: 'none',
-                padding: '0',
-                cursor: 'pointer',
-                borderBottom: currentView === 'info' ? '1px solid var(--ink)' : '1px solid transparent',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              Info
-            </button>
-          </div>
-        )}
-
-        {/* Library Link (when not on homepage) - Coming Soon */}
-        {/* {!isHomePage && (
-          <div style={{ justifySelf: 'center' }}>
-            <Link
-              href="/library"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--step--1)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                color: isLibraryPage ? 'var(--ink)' : 'var(--muted)',
-                textDecoration: 'none',
-                borderBottom: isLibraryPage ? '1px solid var(--ink)' : '1px solid transparent',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              Library
-            </Link>
-          </div>
-        )} */}
-
-        {/* Right: Contact Menu */}
-        <div style={{
-          justifySelf: 'end'
+      <div
+        data-nav-container
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '2rem',
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 2rem'
         }}>
-          {/* Contact Menu (on homepage) */}
+        {/* Brand Name */}
+        <Link
+          href="/"
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 'var(--step-0)',
+            fontWeight: '600',
+            color: 'var(--ink)',
+            textDecoration: 'none',
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase'
+          }}
+        >
+          Behelo
+        </Link>
+
+        {/* Desktop Navigation */}
+        <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          {/* Portfolio Navigation (only on homepage) */}
+          {showPortfolioNav && isHomePage && (
+            <div style={{ display: 'flex', gap: '2rem' }}>
+              <button
+                onClick={() => onViewChange?.('work')}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'var(--step--1)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: currentView === 'work' ? 'var(--ink)' : 'var(--muted)',
+                  background: 'none',
+                  border: 'none',
+                  padding: '0',
+                  cursor: 'pointer',
+                  borderBottom: currentView === 'work' ? '1px solid var(--ink)' : '1px solid transparent',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Work
+              </button>
+              <button
+                onClick={() => onViewChange?.('info')}
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 'var(--step--1)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  color: currentView === 'info' ? 'var(--ink)' : 'var(--muted)',
+                  background: 'none',
+                  border: 'none',
+                  padding: '0',
+                  cursor: 'pointer',
+                  borderBottom: currentView === 'info' ? '1px solid var(--ink)' : '1px solid transparent',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Info
+              </button>
+            </div>
+          )}
+
+          {/* Contact Menu */}
           {isHomePage && (
             <div style={{ position: 'relative' }}>
               <button
@@ -148,7 +142,6 @@ export default function Navigation({ currentView = 'work', onViewChange, showPor
 
               {showContactMenu && (
                 <>
-                  {/* Backdrop */}
                   <div
                     onClick={() => setShowContactMenu(false)}
                     style={{
@@ -161,7 +154,6 @@ export default function Navigation({ currentView = 'work', onViewChange, showPor
                     }}
                   />
 
-                  {/* Contact Dropdown */}
                   <div style={{
                     position: 'absolute',
                     top: '100%',
@@ -213,33 +205,243 @@ export default function Navigation({ currentView = 'work', onViewChange, showPor
                         <span>Email</span>
                         <span style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>↗</span>
                       </a>
-                      {/* <Link
-                        href="/library"
-                        onClick={() => setShowContactMenu(false)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px',
-                          padding: '8px 16px',
-                          textDecoration: 'none',
-                          color: 'var(--ink)',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: 'var(--step--1)',
-                          transition: 'background 0.3s ease'
-                        }}
-                      >
-                        <span>Library</span>
-                      </Link> */}
                     </div>
                   </div>
                 </>
               )}
             </div>
           )}
+        </div>
 
-          {/* Library/Auth removed - portfolio only launch */}
+        {/* Mobile Hamburger Menu */}
+        <button
+          className="mobile-hamburger"
+          onClick={toggleMobileMenu}
+          style={{
+            display: 'none',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '44px',
+            height: '44px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            gap: '4px'
+          }}
+        >
+          <div style={{
+            width: '20px',
+            height: '2px',
+            backgroundColor: 'var(--ink)',
+            transition: 'all 0.3s ease',
+            transform: showMobileMenu ? 'rotate(45deg) translateY(6px)' : 'none'
+          }} />
+          <div style={{
+            width: '20px',
+            height: '2px',
+            backgroundColor: 'var(--ink)',
+            transition: 'all 0.3s ease',
+            opacity: showMobileMenu ? 0 : 1
+          }} />
+          <div style={{
+            width: '20px',
+            height: '2px',
+            backgroundColor: 'var(--ink)',
+            transition: 'all 0.3s ease',
+            transform: showMobileMenu ? 'rotate(-45deg) translateY(-6px)' : 'none'
+          }} />
+        </button>
+      </div>
+
+      {/* Full-Screen Mobile Menu Modal */}
+      {showMobileMenu && (
+        <div
+          className="mobile-menu-modal"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: '#0a0a0a',
+            zIndex: 9999,
+            transform: showMobileMenu ? 'translateX(0)' : 'translateX(-100%)',
+            transition: 'transform 0.3s ease',
+            overflow: 'auto'
+          }}
+          onClick={(e) => {
+            // Close modal when clicking on backdrop (but not on content)
+            if (e.target === e.currentTarget) {
+              closeMobileMenu();
+            }
+          }}
+        >
+        {/* Modal Header */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1.5rem 2rem',
+          borderBottom: '1px solid var(--line)'
+        }}>
+          <Link
+            href="/"
+            onClick={closeMobileMenu}
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 'var(--step-0)',
+              fontWeight: '600',
+              color: 'var(--ink)',
+              textDecoration: 'none',
+              letterSpacing: '-0.02em',
+              textTransform: 'uppercase'
+            }}
+          >
+            Behelo
+          </Link>
+
+          <button
+            onClick={closeMobileMenu}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--ink)',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              padding: '8px',
+              fontFamily: 'var(--font-mono)'
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Modal Content */}
+        <div style={{ padding: '2rem' }}>
+          {/* Portfolio Navigation (only on homepage) */}
+          {showPortfolioNav && isHomePage && (
+            <div style={{ marginBottom: '3rem' }}>
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--step--1)',
+                color: 'var(--muted)',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em'
+              }}>
+                Portfolio
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <button
+                  onClick={() => {
+                    onViewChange?.('work');
+                    closeMobileMenu();
+                  }}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--step-0)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: currentView === 'work' ? 'var(--ink)' : 'var(--muted)',
+                    background: 'none',
+                    border: 'none',
+                    padding: '12px 0',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    borderBottom: '1px solid var(--line)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  Work
+                </button>
+                <button
+                  onClick={() => {
+                    onViewChange?.('info');
+                    closeMobileMenu();
+                  }}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--step-0)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: currentView === 'info' ? 'var(--ink)' : 'var(--muted)',
+                    background: 'none',
+                    border: 'none',
+                    padding: '12px 0',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    borderBottom: '1px solid var(--line)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  Info
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Contact Section */}
+          {isHomePage && (
+            <div>
+              <div style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 'var(--step--1)',
+                color: 'var(--muted)',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em'
+              }}>
+                Connect
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <a
+                  href="https://www.linkedin.com/in/michael-ebako/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobileMenu}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 0',
+                    textDecoration: 'none',
+                    color: 'var(--ink)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--step-0)',
+                    borderBottom: '1px solid var(--line)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  <span>LinkedIn</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>↗</span>
+                </a>
+                <a
+                  href="mailto:michael@behelo.com"
+                  onClick={closeMobileMenu}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 0',
+                    textDecoration: 'none',
+                    color: 'var(--ink)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 'var(--step-0)',
+                    borderBottom: '1px solid var(--line)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  <span>Email</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>↗</span>
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+      )}
     </nav>
+
   );
 }
