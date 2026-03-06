@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: 'Voice actor, builder, and artist crafting stories, tools & asymmetric bets. Based in Oakland.',
     images: [
       {
-        url: '/opengraph-image',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Behelo - Voice Actor, Builder & Artist'
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     creator: '@michaelebako',
     title: 'Behelo - Voice Actor, Builder & Artist',
     description: 'Voice actor, builder, and artist crafting stories, tools & asymmetric bets.',
-    images: ['/opengraph-image']
+    images: ['/og-image.png']
   },
   robots: {
     index: true,
