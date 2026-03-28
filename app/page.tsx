@@ -107,7 +107,7 @@ export default function HomePage() {
                 fontStyle: 'italic'
               }}
             >
-              Built with curiosity & craft in Oakland
+              Built with curiosity & crafted in Oakland
             </p>
           </div>
         </footer>
